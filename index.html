@@ -19,8 +19,9 @@
   </head>
 <body>
   <h1>後端資料備份清單</h1>
-  <div class="desc">來源：<code>https://mid-autumn-backend.onrender.com/api/leaderboard</code>。備份檔位於 <code>backups/</code>。</div>
+    <div class="desc">來源：<code>https://mid-autumn-backend.onrender.com/api/leaderboard</code>。備份檔位於 <code>backups/</code>。</div>
   <div class="status" id="status">載入中…</div>
+  <button id="refreshBtn" style="margin-bottom:12px;padding:6px 10px;background:#1f2937;color:#e2e8f0;border:1px solid #334155;border-radius:6px;cursor:pointer">手動刷新</button>
   <table>
     <thead>
       <tr>
@@ -46,6 +47,7 @@
           return;
         }
         status.textContent = `共 ${manifest.length} 次備份`;
+        tbody.innerHTML = '';
         const rows = manifest.slice().reverse().map(m => {
           const tr = document.createElement('tr');
           const t1 = document.createElement('td'); t1.textContent = m.timestamp; tr.appendChild(t1);
@@ -61,6 +63,13 @@
         status.textContent = '載入失敗：' + err.message;
       }
     }
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = '';
+      const status = document.getElementById('status');
+      status.textContent = '重新載入中…';
+      loadManifest();
+    });
     loadManifest();
   </script>
 </body>
